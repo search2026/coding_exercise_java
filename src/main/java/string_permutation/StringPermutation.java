@@ -52,15 +52,15 @@ public class StringPermutation {
         For example, permutate "abc" to "abc", "acb", "bac", "bca", "cab", "cba"
      */
     public class Solution_2 {
-        private void doPermutate(Set<String> res, StringBuilder sb, String str, boolean[] visited) {
+        private void doPermutate(List<String> res, StringBuilder sb, String str, boolean[] visited) {
             if (sb.length() == str.length()) {
                 res.add(new String(sb));
                 return;
             }
 
             for (int i = 0; i < str.length(); i++) {
-//                if ((i > 0) && !visited[i] && str.charAt(i) == str.charAt(i-1) )
-//                    continue;
+                if ((i > 0) && visited[i-1] && str.charAt(i) == str.charAt(i-1) )
+                    continue;
                 if (!visited[i]) {
                     visited[i] = true;
                     sb.append(str.charAt(i));
@@ -77,10 +77,10 @@ public class StringPermutation {
             }
 
             int n = str.length();
-            Set<String> res = new HashSet<>();
+            List<String> res = new ArrayList<>();
             if (n == 1) {
                 res.add(str);
-                return new ArrayList<>(res);
+                return res;
             }
             char[] chars = str.toCharArray();
             Arrays.sort(chars);
@@ -88,7 +88,7 @@ public class StringPermutation {
             System.out.println(sorted);
             boolean visited[] = new boolean[n];
             doPermutate(res, new StringBuilder(), sorted, visited);
-            return new ArrayList<>(res);
+            return res;
         }
     }
 
