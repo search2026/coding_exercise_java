@@ -1,109 +1,70 @@
+
 apply plugin: 'java'
-apply plugin: 'eclipse'
 apply plugin: 'idea'
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
-
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
-eclipse {
-    classpath {
-        downloadSources = true
-        downloadJavadoc = false
-    }
-}
-
-group = 'search2018'
-archivesBaseName = 'java-coding'
+group = 'search2026'
+archivesBaseName = 'leetcode-java-code-exercise'
 version = '1.0'
-description = 'java coding exercise'
+description = 'some random java code exercises'
 
-repositories {
-    mavenCentral()
+wrapper {
+    gradleVersion = '7.6.2'
 }
 
-ext.junitVintageVersion  = '4.12.2'
-ext.junitPlatformVersion = '1.1.0'
-ext.junitJupiterVersion  = '5.1.0'
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea' // optional (to generate IntelliJ IDEA project files)
 
-apply plugin: 'java'
-apply plugin: 'idea'
-
-dependencies {
-    compile("org.apache.commons:commons-lang3:3.7")
-    compile('org.apache.commons:commons-collections4:4.1')
-    compile("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")
-    // backward compatible with junit 4
-    compile("org.junit.vintage:junit-vintage-engine:${junitVintageVersion}")
-    testCompile("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
-    testCompile("org.junit.platform:junit-platform-runner:${junitPlatformVersion}")
-    testRuntime("org.junit.platform:junit-platform-launcher:${junitPlatformVersion}")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")
-}
-
-sourceSets.test.java.srcDir 'src/main/java'
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.5.1'
-}
-
-task question {
-    doLast {
-        def insertUnderlineIfStartsWithDigit = { s ->
-            if (Character.isDigit(s.charAt(0))) {
-                s = "_" + s
-            }
-            s
-        }
-
-        if (!project.hasProperty('q')) {
-            throw new InvalidUserDataException('You need to specify a question. E.g., gradle question "-Pq=Some Question"')
-        }
-
-        def question = project.q
-
-        def questionPackage = insertUnderlineIfStartsWithDigit(question.replaceAll(' ', '_').toLowerCase())
-
-        def className = insertUnderlineIfStartsWithDigit(question.replaceAll(' ', ''))
-
-        def questionPackageDir = new File(sourceSets.main.java.srcDirs.iterator().next(), questionPackage)
-        if (!questionPackageDir.exists()) {
-            println 'Create ' + questionPackageDir
-            questionPackageDir.mkdirs()
-        }
-
-        def questionFile = new File(questionPackageDir, className + '.java')
-        if (!questionFile.exists()) {
-            println 'Create ' + questionFile
-            questionFile.withWriter { out ->
-                out.writeLine("""\
-package ${questionPackage};
-
-import java.util.*;
-
-import org.junit.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-public class ${className} {
-    /*
-     */
-    public class Solution {
-
+    java {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
-    public static class UnitTest {
-        @Test
-        public void test1() {
-            Solution sol = new ${className}().new Solution();
-            assertEquals(1, 1);
+    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
         }
     }
-}
-""")
+
+    ext {
+        collections4Version = '4.4'
+        junitbomVersion = '5.7.0'
+        lang3Version = '3.11'
+        log4jVersion = '2.13.3'
+    }
+
+    dependencies {
+        implementation "org.apache.commons:commons-collections4:${collections4Version}"
+        implementation "org.apache.commons:commons-lang3:${lang3Version}"
+
+        implementation "org.apache.logging.log4j:log4j-api:${log4jVersion}"
+        implementation "org.apache.logging.log4j:log4j-core:${log4jVersion}"
+
+        // Junit5 tests
+        testImplementation "org.junit.jupiter:junit-jupiter-api:${junitbomVersion}"
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitbomVersion}"
+        // Support for Junit4 tests
+        testCompileOnly "junit:junit:4.12"
+        testRuntimeOnly "org.junit.vintage:junit-vintage-engine:${junitbomVersion}"
+    }
+
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events 'PASSED', 'FAILED', 'SKIPPED'
+        }
+        afterSuite { desc, result ->
+            if (!desc.parent) {
+                println "\nTest result: ${result.resultType}"
+                println "Test summary: ${result.testCount} tests completed, " +
+                        "${result.successfulTestCount} succeeded, " +
+                        "${result.failedTestCount} failed, " +
+                        "${result.skippedTestCount} skipped"
             }
         }
     }
 }
-
