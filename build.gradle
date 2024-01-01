@@ -43,7 +43,7 @@ allprojects {
         implementation "org.apache.logging.log4j:log4j-api:${log4jVersion}"
         implementation "org.apache.logging.log4j:log4j-core:${log4jVersion}"
 
-        // Junit5 tests
+        // Junit5 dependencies for code inside java folder
         implementation "org.junit.jupiter:junit-jupiter-api:${junitbomVersion}"
         runtimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitbomVersion}"
 
