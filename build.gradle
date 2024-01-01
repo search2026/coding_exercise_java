@@ -3,7 +3,7 @@ apply plugin: 'java'
 apply plugin: 'idea'
 
 group = 'search2026'
-archivesBaseName = 'leetcode-java-code-exercise'
+archivesBaseName = 'java-code-exercise'
 version = '1.0'
 description = 'some random java code exercises'
 
@@ -23,7 +23,6 @@ allprojects {
     [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
     repositories {
-        jcenter()
         mavenCentral()
         maven {
             url "https://plugins.gradle.org/m2/"
@@ -32,9 +31,9 @@ allprojects {
 
     ext {
         collections4Version = '4.4'
-        junitbomVersion = '5.7.0'
-        lang3Version = '3.11'
-        log4jVersion = '2.13.3'
+        junitbomVersion = '5.10.1'
+        lang3Version = '3.14.0'
+        log4jVersion = '2.22.1'
     }
 
     dependencies {
@@ -45,10 +44,14 @@ allprojects {
         implementation "org.apache.logging.log4j:log4j-core:${log4jVersion}"
 
         // Junit5 tests
+        implementation "org.junit.jupiter:junit-jupiter-api:${junitbomVersion}"
+        runtimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitbomVersion}"
+
+        // Junit5 tests
         testImplementation "org.junit.jupiter:junit-jupiter-api:${junitbomVersion}"
         testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitbomVersion}"
         // Support for Junit4 tests
-        testCompileOnly "junit:junit:4.12"
+        testCompileOnly "junit:junit:4.13.2"
         testRuntimeOnly "org.junit.vintage:junit-vintage-engine:${junitbomVersion}"
     }
 

@@ -4,10 +4,11 @@ import java.util.*;
 
 import common.Interval;
 
-import org.junit.Test;
-
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 
 public class IntersectIntervals {
     /*

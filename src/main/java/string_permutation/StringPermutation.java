@@ -3,9 +3,12 @@ package string_permutation;
 import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 
 public class StringPermutation {
     /*
@@ -86,13 +89,14 @@ public class StringPermutation {
             Arrays.sort(chars);
             String sorted = new String(chars);
             System.out.println(sorted);
-            boolean visited[] = new boolean[n];
+            boolean[] visited = new boolean[n];
             doPermutate(res, new StringBuilder(), sorted, visited);
             return res;
         }
     }
 
-    public static class UnitTest {
+    @Nested
+    class UnitTest {
         @Test
         public void test1() {
             Solution sol = new StringPermutation().new Solution();
