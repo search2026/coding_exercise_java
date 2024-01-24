@@ -49,7 +49,8 @@ public class AllValidateRoutes {
         }
     }
 
-    public static class UnitTest {
+    @Nested
+    class UnitTest {
         @Test
         public void test1() {
             Solution sol = new AllValidateRoutes().new Solution();
